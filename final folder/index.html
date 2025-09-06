@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sandesh Top Deals — Smart Shopping & Best Affiliate Offers</title>
+  <meta name="description" content="Sandesh Top Deals — curated deals across mens, womens, electronics, kids & more. Compare prices and buy through affiliate links." />
+  <meta name="keywords" content="affiliate, deals, shopping, discounts, electronics, fashion, amazon" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0b1020;
+      --surface:#0f1724;
+      --muted:#9aa4b2;
+      --accent:#ff6a00;
+      --max-width:1200px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui;line-height:1.45;background:#071021;color:#e6eef9;}
+    .container{max-width:var(--max-width);margin:0 auto;padding:20px}
+    a{text-decoration:none}
+
+    /* 3D background */
+    .bg-3d{position:fixed;inset:0;z-index:-1;pointer-events:none}
+    .bg-3d .bg-layer{position:absolute;inset:0;
+      background:radial-gradient(600px 400px at 10% 10%,rgba(34,197,94,0.08),transparent 10%),
+                 radial-gradient(600px 300px at 90% 80%,rgba(59,130,246,0.06),transparent 12%),
+                 linear-gradient(180deg,rgba(2,6,23,0.9),rgba(5,12,20,0.95));}
+
+    /* header */
+    header{position:sticky;top:0;z-index:10;background:rgba(3,7,18,0.6);backdrop-filter:blur(6px);
+      display:flex;align-items:center;justify-content:space-between;padding:12px 20px}
+    header .logo{font-weight:700;color:#fff}
+    nav ul{list-style:none;display:flex;gap:12px;margin:0;padding:0}
+    nav a{color:var(--muted);padding:6px 8px;border-radius:6px}
+    nav a:hover{color:#fff;background:rgba(255,255,255,0.05)}
+
+    /* search & filters */
+    .header-actions{display:flex;gap:12px;align-items:center}
+    .search{display:flex;align-items:center;background:rgba(255,255,255,0.05);padding:4px;border-radius:6px}
+    .search input{background:transparent;border:0;color:#fff;padding:6px;width:140px}
+    .search button{background:none;border:0;color:var(--muted)}
+    select{background:#0f1728;color:#e6eef9;border:1px solid rgba(255,255,255,0.1);padding:6px;border-radius:6px}
+
+    /* hero */
+    .hero{padding:40px 20px;text-align:center}
+    .hero h1{margin:0 0 8px;font-size:1.6rem}
+    .btn{display:inline-block;padding:10px 16px;border-radius:8px}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),#ff9a3b);color:#fff}
+
+    /* products */
+    .products-section{padding:20px}
+    .product-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+    .card{background:rgba(255,255,255,0.05);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px}
+    .card img{max-width:160px;height:160px;object-fit:contain;margin:auto}
+    .card h3{margin:0;font-size:1rem}
+    .price{font-weight:700}
+    .cta{margin-top:auto;display:flex;gap:6px;flex-wrap:wrap}
+    .btn.subtle{background:none;border:1px solid rgba(255,255,255,0.1);color:#e6eef9}
+
+    /* footer */
+    footer{border-top:1px solid rgba(255,255,255,0.1);padding:20px;text-align:center;font-size:0.9rem;color:var(--muted)}
+
+    /* modal */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;padding:20px}
+    .modal[hidden]{display:none}
+    .modal-panel{background:#0b1220;padding:20px;border-radius:12px;max-width:600px;width:100%;position:relative}
+    .modal-close{position:absolute;top:10px;right:10px;background:none;border:0;color:#fff;font-size:1.2rem}
+  </style>
+</head>
+<body>
+  <!-- Background -->
+  <div class="bg-3d"><div class="bg-layer"></div></div>
+
+  <!-- Header -->
+  <header>
+    <a class="logo" href="#">Sandesh Top Deals</a>
+    <nav>
+      <ul>
+        <li><a href="#all" data-cat="all">All</a></li>
+        <li><a href="#mens" data-cat="mens">Mens</a></li>
+        <li><a href="#womens" data-cat="womens">Womens</a></li>
+        <li><a href="#electronics" data-cat="electronics">Electronics</a></li>
+        <li><a href="#kids" data-cat="kids">Kids</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <div class="search">
+        <input id="searchInput" type="search" placeholder="Search...">
+        <button id="clearSearch"><i class="bx bx-x"></i></button>
+      </div>
+      <select id="categorySelect">
+        <option value="all">All</option>
+        <option value="mens">Mens</option>
+        <option value="womens">Womens</option>
+        <option value="electronics">Electronics</option>
+        <option value="kids">Kids</option>
+      </select>
+      <select id="sortSelect">
+        <option value="relevance">Relevance</option>
+        <option value="price-asc">Price Low→High</option>
+        <option value="price-desc">Price High→Low</option>
+      </select>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>Shop Smart, Save Big</h1>
+    <p>Curated deals with affiliate links (no extra cost to you)</p>
+    <a href="#all" class="btn primary">Browse Deals</a>
+  </section>
+
+  <!-- Products -->
+  <section id="all" class="products-section container">
+    <h2>Products</h2>
+    <div id="productGrid" class="product-grid"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© <span id="year"></span> Sandesh Top Deals</p>
+    <p>Disclaimer: We may earn a commission from affiliate links.</p>
+  </footer>
+
+  <!-- Modal -->
+  <div id="productModal" class="modal" hidden>
+    <div class="modal-panel">
+      <button id="closeModal" class="modal-close"><i class="bx bx-x"></i></button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <script>
+    const PRODUCTS = [
+      {id:"m1",title:"Levi's Men's Regular Fit T-Shirt",category:"mens",price:899,img:"https://m.media-amazon.com/images/I/71YXzeOuslL._AC_UL320_.jpg",url:"https://www.amazon.in/dp/B09V3J2WXX?tag=YOUR-ID",desc:"Comfortable cotton tee — everyday essential."},
+      {id:"w1",title:"BTS Oversized Women's T-Shirt",category:"womens",price:500,img:"https://m.media-amazon.com/images/I/71t6YcGqGmL._AC_UL320_.jpg",url:"https://www.amazon.in/dp/B09QX28M5P?tag=YOUR-ID",desc:"Stylish oversized fit for casual wear."},
+      {id:"e1",title:"Apple iPhone 13 (128GB)",category:"electronics",price:52999,img:"https://m.media-amazon.com/images/I/71hIfcIPyxS._AC_UL320_.jpg",url:"https://www.amazon.in/dp/B09G9FPGTN?tag=YOUR-ID",desc:"A15 Bionic, excellent camera and battery life."},
+      {id:"k1",title:"Remote Car Toy for Kids",category:"kids",price:1299,img:"https://m.media-amazon.com/images/I/81gGK8m0eOL._AC_UL320_.jpg",url:"https://www.amazon.in/dp/B08N5WRWNW?tag=YOUR-ID",desc:"Safe & durable remote racer with rechargeable battery."}
+    ];
+
+    const state={query:"",category:"all",sort:"relevance"};
+    const productGrid=document.getElementById("productGrid");
+    const searchInput=document.getElementById("searchInput");
+    const clearSearch=document.getElementById("clearSearch");
+    const categorySelect=document.getElementById("categorySelect");
+    const sortSelect=document.getElementById("sortSelect");
+    const modal=document.getElementById("productModal");
+    const modalContent=document.getElementById("modalContent");
+    const closeModal=document.getElementById("closeModal");
+
+    function formatPrice(p){return "₹"+p.toLocaleString("en-IN");}
+    function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));}
+    function filterProducts(){
+      let list=PRODUCTS.slice();
+      if(state.category!=="all"){list=list.filter(p=>p.category===state.category);}
+      if(state.query){list=list.filter(p=>(p.title+" "+p.desc).toLowerCase().includes(state.query.toLowerCase()));}
+      if(state.sort==="price-asc")list.sort((a,b)=>a.price-b.price);
+      if(state.sort==="price-desc")list.sort((a,b)=>b.price-a.price);
+      return list;
+    }
+    function render(){
+      productGrid.innerHTML="";
+      const list=filterProducts();
+      if(!list.length){productGrid.innerHTML="<p>No products found.</p>";return;}
+      list.forEach(p=>{
+        const card=document.createElement("div");
+        card.className="card";
+        card.innerHTML=`
+          <img src="${p.img}" alt="${escapeHtml(p.title)}">
+          <h3>${escapeHtml(p.title)}</h3>
+          <div class="price">${formatPrice(p.price)}</div>
+          <div class="cta">
+            <a class="btn primary" href="${p.url}" target="_blank">Buy</a>
+            <button class="btn subtle" data-id="${p.id}">Details</button>
+          </div>`;
+        card.querySelector("button").addEventListener("click",()=>openModal(p.id));
+        productGrid.appendChild(card);
+      });
+    }
+    function openModal(id){
+      const p=PRODUCTS.find(x=>x.id===id);
+      if(!p)return;
+      modalContent.innerHTML=`
+        <h3>${escapeHtml(p.title)}</h3>
+        <img src="${p.img}" alt="${escapeHtml(p.title)}" style="max-width:200px">
+        <p>${escapeHtml(p.desc)}</p>
+        <p class="price">${formatPrice(p.price)}</p>
+        <a class="btn primary" href="${p.url}" target="_blank">Buy on Amazon</a>`;
+      modal.hidden=false;
+    }
+    function closeModalFn(){modal.hidden=true;}
+    searchInput.addEventListener("input",e=>{state.query=e.target.value;render();});
+    clearSearch.addEventListener("click",()=>{searchInput.value="";state.query="";render();});
+    categorySelect.addEventListener("change",e=>{state.category=e.target.value;render();});
+    sortSelect.addEventListener("change",e=>{state.sort=e.target.value;render();});
+    closeModal.addEventListener("click",closeModalFn);
+    modal.addEventListener("click",e=>{if(e.target===modal)closeModalFn();});
+    document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModalFn();});
+
+    // ✅ Navigation links filter products
+    document.querySelectorAll("nav a").forEach(link=>{
+      link.addEventListener("click",e=>{
+        e.preventDefault();
+        const cat=link.dataset.cat;
+        if(cat){ state.category=cat; categorySelect.value=cat; render(); }
+        window.scrollTo({top:document.querySelector("#all").offsetTop-60,behavior:"smooth"});
+      });
+    });
+
+    document.getElementById("year").textContent=new Date().getFullYear();
+    render();
+  </script>
+</body>
+</html>
